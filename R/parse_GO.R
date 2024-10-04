@@ -1,7 +1,6 @@
 parse.eggNOG.GO <- function(eggNOG.file) {
 
-  eggno <- readr::read_delim(file = eggNOG.file,
-                             col_names = T, delim = "\t", comment = "##")
+  eggno <-load.eggNOG(eggNOG.file)
 
   # parse egoNOG
   go.info <- get.go.info()
