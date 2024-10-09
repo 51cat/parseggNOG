@@ -1,13 +1,9 @@
-library(magrittr)
-
-parse.eggNOG.KEGG <- function(eggNOG.file, species = NULL, ...) {
+parse.eggNOG.KEGGP <- function(eggNOG.file, species = NULL, ...) {
 
   eggno <-load.eggNOG(eggNOG.file, ...)
+  kegg.df <- get.KEGG.annotation(eggno, use = "Pathway")
 
-  anno.KEGG <- eggno |>
-
-    dplyr::filter(KEGG_Pathway != "-") |>
-    dplyr::select(Gene, KEGG_ko, KEGG_Pathway) |>
+  kegg.df <- kegg.df |>
     dplyr::mutate(KEGG_ko = gsub("ko:", "", KEGG_ko),
                   KEGG_Pathway = gsub("ko", "map", KEGG_Pathway)) |>
     dplyr::group_by(Gene) |>
@@ -22,19 +18,19 @@ parse.eggNOG.KEGG <- function(eggNOG.file, species = NULL, ...) {
     colnames(pathway.all) <- c("pathway", "name")
 
     if (!is.null(species)) {
-      anno.KEGG <- anno.KEGG |>
+      kegg.df <- kegg.df |>
         dplyr::mutate(pathway = sub("^[a-zA-Z]+", species, pathway)) |>
         dplyr::filter(pathway %in% pathway.all[["pathway"]])
     }
 
-    anno.KEGG <- anno.KEGG |>
+    kegg.df <- kegg.df |>
       dplyr::left_join(pathway.all, by = "pathway") |>
     tidyr::drop_na()
 
     return(
       list(
-        TERM2GENE= anno.KEGG |> dplyr::select(pathway, Gene),
-        TERM2NAME = anno.KEGG |> dplyr::select(pathway, name)
+        TERM2GENE= kegg.df |> dplyr::select(pathway, Gene),
+        TERM2NAME = kegg.df |> dplyr::select(pathway, name) |> dplyr::distinct()
       )
       )
 }
