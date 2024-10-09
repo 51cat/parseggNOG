@@ -19,7 +19,7 @@ parse.eggNOG.GO <- function(eggNOG.file) {
     dplyr::ungroup()
 
   TERM2GENE.df <- anno.GO[, c("GO", "Gene" ,"level")] |> tidyr::drop_na()
-  TERM2NAME.df <- go.info[, c("GO", "name")]
+  TERM2NAME.df <- go.info[, c("GO", "name")] |> dplyr::distinct()
 
   return(
     list(
