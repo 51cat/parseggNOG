@@ -16,14 +16,14 @@ parse.eggNOG.KEGG <- function(eggNOG.file, species = NULL, ...) {
     tidyr::unnest(KO) |>
     tidyr::unnest(pathway) |>
     dplyr::distinct() |>
-    ungroup()
+    dplyr::ungroup()
 
     pathway.all <- kegg_list('pathway', species = species)
     colnames(pathway.all) <- c("pathway", "name")
 
-    if (!is.null(organism)) {
+    if (!is.null(species)) {
       anno.KEGG <- anno.KEGG |>
-        dplyr::mutate(pathway = sub("^[a-zA-Z]+", organism, pathway)) |>
+        dplyr::mutate(pathway = sub("^[a-zA-Z]+", species, pathway)) |>
         dplyr::filter(pathway %in% pathway.all[["pathway"]])
     }
 
@@ -38,29 +38,3 @@ parse.eggNOG.KEGG <- function(eggNOG.file, species = NULL, ...) {
       )
       )
 }
-
-
-kegg_rest <- function(rest_url) {
-  message('Reading KEGG annotation online: "', rest_url, '"...')
-  content <- yulab.utils::yread(rest_url)
-
-  content %<>% strsplit(., "\t") %>% do.call('rbind', .)
-  res <- data.frame(from=content[,1],
-                    to=content[,2])
-  return(res)
-}
-
-kegg_list <- function(db, species = NULL) {
-  if (db == "pathway") {
-    url <- paste("https://rest.kegg.jp/list", db, species, sep="/")
-  } else {
-    ## module do not need species
-    url <- paste("https://rest.kegg.jp/list", db, sep="/")
-  }
-
-  kegg_rest(url)
-}
-
-
-
-
