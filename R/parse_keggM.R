@@ -23,7 +23,7 @@ parse.eggNOG.KEGGM <- function(eggNOG.file , ...) {
 
   return(
     list(
-      TERM2GENE= kegg.df |> dplyr::select(Module, Gene)  |> dplyr::distinct()
+      TERM2GENE= kegg.df |> dplyr::select(Module, Gene)  |> dplyr::distinct(),
       TERM2NAME = kegg.df |> dplyr::select(Module, name) |> dplyr::distinct()
     )
   )
