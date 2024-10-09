@@ -73,6 +73,3 @@ get.EC <- function(ec.number) {
     return(get.EC(ec.num.new))
   }
 }
-
-s <- parse.eggNOG.EC("test_data/out.emapper.annotations")
-res <- s$TERM2NAME

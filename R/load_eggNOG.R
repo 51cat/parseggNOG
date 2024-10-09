@@ -4,7 +4,7 @@ load.eggNOG <- function(file,
                         comment = "##",
                         ...){
   eggno <- readr::read_delim(file,
-                             col_names = T, delim = "\t", comment = "##", ...)
+                             col_names = T, delim = "\t", comment = "##", show_col_types = FALSE, ...)
 
   return(eggno |>
            dplyr::rename(Gene = `#query`) )

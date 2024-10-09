@@ -1,3 +1,5 @@
+library(magrittr)
+
 kegg_rest <- function(rest_url) {
   message('Reading KEGG annotation online: "', rest_url, '"...')
   content <- yulab.utils::yread(rest_url)
