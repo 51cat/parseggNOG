@@ -1,6 +1,34 @@
-# TO DO:
-# 对于从kegg抓取的ecname需要将已经过时的名字进行修改
-#  gotenzymes: 速度过慢,后期移除
+#' Parse eggNOG EC Number Annotations
+#'
+#' This function processes an eggNOG output file to parse EC number annotations.
+#' It filters out genes without EC numbers, maps EC numbers to their corresponding genes,
+#' and returns a list of data frames that map EC numbers to genes and their names.
+#' The function can use either the KEGG database or the GotEnzymes database for EC number annoate.
+#'
+#' @param eggNOG.file The path to the eggNOG output file.
+#' @param database A character string specifying the database to use for EC number lookup.
+#'   Defaults to "KEGG". Can be set to "GotEnzymes" for slower, real-time lookup.
+#'
+#' @return A list of two data frames:
+#' \item{TERM2GENE}{A data frame mapping EC numbers to genes.}
+#' \item{TERM2NAME}{A data frame mapping EC numbers to their names.}
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Parse an eggNOG output file for EC number annotations using the KEGG database
+#' ec_annotations <- parse.eggNOG.EC("path/to/eggNOG_output.txt")
+#'
+#' # Parse an eggNOG output file for EC number annotations using the GotEnzymes database (very slowly)
+#' ec_annotations_gote <- parse.eggNOG.EC("path/to/eggNOG_output.txt", database = "GotEnzymes")
+#'
+#' # View the TERM2GENE data frame
+#' print(ec_annotations$TERM2GENE)
+#'
+#' # View the TERM2NAME data frame
+#' print(ec_annotations$TERM2NAME)
+#' }
 parse.eggNOG.EC <- function(eggNOG.file, database = "KEGG"){
   eggno <- load.eggNOG(eggNOG.file)
 

@@ -1,13 +1,42 @@
-parse.eggNOG.GO <- function(eggNOG.file) {
+#' Parse eggNOG GO Annotations
+#'
+#' This function processes an eggNOG output file to parse Gene Ontology (GO) annotations.
+#' It filters out genes without GO annotations, maps GO terms to their corresponding genes and descriptions,
+#' and returns a list of data frames that categorize genes by GO level (Cellular Component, Biological Process, Molecular Function).
+#'
+#' @param eggNOG.file The path to the eggNOG output file.
+#' @param ... Additional arguments passed to load.eggNOG.
+#'
+#' @return A list of data frames:
+#' \item{TERM2GENE.CC}{A data frame mapping GO terms (Cellular Component) to genes.}
+#' \item{TERM2GENE.BP}{A data frame mapping GO terms (Biological Process) to genes.}
+#' \item{TERM2GENE.MF}{A data frame mapping GO terms (Molecular Function) to genes.}
+#' \item{TERM2GENE.ALL}{A data frame mapping all GO terms to genes.}
+#' \item{TERM2NAME}{A data frame mapping GO terms to their names.}
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Parse an eggNOG output file for GO annotations
+#' go_annotations <- parse.eggNOG.GO("path/to/eggNOG_output.txt")
+#'
+#' # View the TERM2GENE.CC data frame
+#' print(go_annotations$TERM2GENE.CC)
+#'
+#' # View the TERM2NAME data frame
+#' print(go_annotations$TERM2NAME)
+#' }
+parse.eggNOG.GO <- function(eggNOG.file, ...) {
 
-  eggno <-load.eggNOG(eggNOG.file)
+  eggno <-load.eggNOG(eggNOG.file, ...)
 
   # parse egoNOG
   go.info <- get.go.info()
 
   anno.GO <- eggno |>
     #select( `#query`, GOs, Description ) %>%
-    dplyr::rename(Gene = `#query`, GO = GOs)  |>
+    dplyr::rename(GO = GOs)  |>
 
     dplyr::filter(GO != "-") |>
     dplyr::group_by(Gene, Description) |>
