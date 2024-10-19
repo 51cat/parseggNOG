@@ -39,7 +39,8 @@ parse.eggNOG.EC <- function(eggNOG.file, database = "KEGG"){
 
     dplyr::summarise(EC=stringr::str_split(EC, ",")) |>
     tidyr::unnest(EC)  |>
-    dplyr::ungroup()
+    dplyr::ungroup() |>
+    dplyr::select(EC, Gene)
 
   if(database == "GotEnzymes") {
     EC.num <-  anno.EC$EC |> unique()
